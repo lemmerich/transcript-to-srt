@@ -1,0 +1,157 @@
+00:00:06 
+
+Hello and welcome to this class. 
+
+00:00:09 
+
+In the previous class, we defined how this pipeline is started by defining the trigger step. 
+
+00:00:14 
+
+Now that we know this pipeline will be published as an API, we want to use the code attribute from the request to retrieve from a database the respective customer record associated with this value. 
+
+00:00:26 
+
+To access a relational database like my SQL, Oracle SQL Server and others, we will use DB connector V2. With this connector you don't have to worry about downloading plugins or external drivers, nor about version compatibility with the various supported databases. The connector is responsible for abstracting this complexity and you only need to worry about. 
+
+00:00:47 
+
+Some minimal settings for using this technology. 
+
+00:00:50 
+
+When opening this technology configuration form, we will need to choose whether we are executing a query or a procedure for our lab. 
+
+00:00:58 
+
+We will use a query. 
+
+00:01:00 
+
+In addition, we need to define the access credentials, username and password in order to connect to the database. 
+
+00:01:08 
+
+On the platform, these credentials must be previously registered in the settings screen under the name of accounts. 
+
+00:01:14 
+
+Another important highlight is that once registered, these passwords are kept securely encrypted into a password vault and will not be visible to users. 
+
+00:01:25 
+
+This information can also be defined for both environments. 
+
+00:01:28 
+
+Test and production. 
+
+00:01:31 
+
+The next configuration item is the connection string, which will allow us to connect to the desired database. 
+
+00:01:36 
+
+Although we can fill this information directly into the component, the best practice is to store this information in a global variable. 
+
+00:01:45 
+
+As well as setting up accounts, global variables can be set for both test and production environment. 
+
+00:01:53 
+
+To use a global variable, just select its name from the list on the right of the configuration form. 
+
+00:01:58 
+
+This list is shown only when we click on the fields that allow its use. 
+
+00:02:07 
+
+For this lab, select the variable my SQL DB V2. 
+
+00:02:15 
+
+Finally, let's define the query that will be used in this case. 
+
+00:02:19 
+
+We want to retrieve a customer record, so our query will be select all from customers. 
+
+00:02:27 
+
+With the component connected to the trigger step, we can run the pipeline in development mode and check the result of the query execution in the database. 
+
+00:02:36 
+
+For that we can click on play and when the processing finishes we can check the return of the pipeline in the lower right box of the execution console. 
+
+00:02:45 
+
+Note that the data returned from the database has been converted to Jason format and this payload could be used as input data for a next component in this logic. 
+
+00:02:56 
+
+We retrieved the records from the customer table as expected. 
+
+00:02:59 
+
+However, our goal was to retrieve only the record whose code is equal to the value of the code attribute passed as a parameter to this service. 
+
+00:03:07 
+
+For that we need to change the query to take into account the value of a variable, which in this case is the code attribute. 
+
+00:03:14 
+
+DB provides an expression language that can be used in the development of pipelines precisely for cases like this where we need to access values from adjacent structure. 
+
+00:03:23 
+
+This expression language we will call double braces. 
+
+00:03:28 
+
+Double braces allow us to access global variable values, pipeline metadata and also provide a way to access the value of a Jason attribute. 
+
+00:03:38 
+
+To access the code attribute value and use it as a parameter of the query that we are going to run, just use the following structure. 
+
+00:03:46 
+
+Open the double braces. 
+
+00:03:48 
+
+Use the reserved word message which will indicate that we are accessing the components input payload and then we navigate to the attribute using DOT notation. 
+
+00:03:57 
+
+In our scenario, we will have message DOT query and path code and then we close the double braces. 
+
+00:04:04 
+
+This expression language also allows us to use utility functions to, for example, add a check to validate whether the code field came empty or did not exist in the payload we are using, but for the purpose of this lab we will make accessing this value simpler. 
+
+00:04:20 
+
+Now, with the connector properly configured, we can test our logic one more time and verify that the database is returned as just the record referring to the code we passed and no longer a list with all the records. 
+
+00:04:35 
+
+However, if we use a code value whose record does not exist in the database, we will receive an empty list as an answer in the next class. 
+
+00:04:43 
+
+We will deal with this scenario. 
+
+00:04:46 
+
+We will use a conditional statement to return an informational message to the consumer of this service when no record is found. 
+
+00:04:52 
+
+We're also going to do our first data transformation on this return we got from the database. 
+
+ 
